@@ -18,24 +18,25 @@ small_data = read_csv("../data/subset_1percent.csv")
 medium_data = read_csv("../data/subset_5percent.csv")
 big_data = read_csv("../data/subset_10percent.csv")
 
-# ~ 52% Accurate
-X = small_data.loc[:, "FIRST_RETURNS_int_P01_2m+":"FIRST_RETURNS_int_P99_2m+"]
-# ~ 47% Accurate
-# X = small_data.iloc[:, 2:]
+X = small_data.iloc[:, 2:]
 
 def predict(y, class_type):
     X_train, X_test, y_train, y_test = train_test_split(X, y)
+
     scaler = StandardScaler()
     scaler.fit(X_train)
-
     X_train = scaler.transform(X_train)
     X_test = scaler.transform(X_test)
 
-    nn = MLPClassifier(hidden_layer_sizes=(10, 10, 10), max_iter=1000)
-    nn.fit(X_train, y_train.values.ravel())
+    nn = MLPClassifier(hidden_layer_sizes=(5,), max_iter=10000, learning_rate='adaptive')
+    nn.fit(X_train, y_train)
 
-    print("Accuracy of predictions for", class_type, ":",
-          accuracy_score(y_test, nn.predict(X_test)))
+    y_pred = nn.predict(X_test)
+    print(class_type)
+    print("Tested sample:   ", y_test.tolist()[:40])
+    print("Predicted sample:", y_pred.tolist()[:40])
+    print("Accuracy of predictions:", accuracy_score(y_test, y_pred))
+    print()
 
 predict(small_data["Severity_classes"], "Severity Classes")
 predict(small_data["BA_classes"], "BA Classes")
