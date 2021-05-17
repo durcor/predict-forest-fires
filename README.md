@@ -1,5 +1,5 @@
 # predict-forest-fires
-Group research project for EN250 (Quantitative Biology) at Stevens Institute of Technology concerning predicting forest fire likelihood using neural networks.
+Group research project for EN250 (Quantitative Biology) at Stevens Institute of Technology concerning predicting forest fire severity using neural networks.
 
 ## Dependencies
 - [python](https://www.python.org/downloads/)

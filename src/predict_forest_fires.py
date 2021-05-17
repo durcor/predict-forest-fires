@@ -3,13 +3,18 @@
 # Group Members: Tyler Kaminski, Edward Gaskin, Conor McCreedy
 # I pledge my honor that I have abided by the Stevens Honor System.
 #
+# Dependencies:
+import sys
+# Pandas: Interacting w/ CSVs
 from pandas import read_csv
+# Scikit-learn: Neural Network Implementation
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 
+# Calculate a broader accuracy score, allowing for a margin of error of +/-1.
 def broad_accuracy_score(y_true, y_pred):
     y_true = y_true.tolist()
     y_pred = y_pred.tolist()
@@ -25,10 +30,9 @@ def broad_accuracy_score(y_true, y_pred):
 # BA: Basal Area Loss
 # Range from 1 - 9
 
-# data = read_csv("../data/subset_1percent.csv")
-# data = read_csv("../data/subset_5percent.csv")
-data = read_csv("../data/subset_10percent.csv")
-
+# Optionally provide training set as an argument.
+data = read_csv("../data/subset_10percent.csv" if len(sys.argv) < 2
+                else sys.argv[1])
 # Read all recorded parameters into the variable to be trained/tested.
 X = data.iloc[:, 2:]
 
@@ -36,8 +40,9 @@ X = data.iloc[:, 2:]
 # Predict BA and Severity classes.
 def predict(y, class_type):
     # Partition samples to train and test.
-    X_train, X_test, y_train, y_test = train_test_split(X, y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
+    # Scale data for more accuarte training.
     scaler = StandardScaler()
     scaler.fit(X_train)
     X_train = scaler.transform(X_train)
